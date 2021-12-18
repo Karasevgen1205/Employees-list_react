@@ -1,4 +1,4 @@
-import "./employees-add-form.css";
+import "./employees-add-form.scss";
 
 const EmployeesAddForm = () => {
   return (
