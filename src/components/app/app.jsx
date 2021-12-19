@@ -55,9 +55,45 @@ class App extends Component {
     });
   };
 
-  onChangeFilter(filter) {
-    console.log(filter);
-  }
+  onChangeFilter = (filter) => {
+    this.setState(() => {
+      return { filter };
+    });
+  };
+
+  filteredData = (items, filter) => {
+    if (filter.length === 0) {
+      return items;
+    }
+    const newData = items.filter((item) => {
+      if (item.name.indexOf(filter) > -1) {
+        return item;
+      }
+    });
+
+    return newData;
+  };
+
+  onChangeBtn = (category) => {
+    this.setState({ category });
+  };
+
+  filteredCategory = (items, category) => {
+    switch (category) {
+      case "all":
+        return items;
+      case "increase":
+        return items.filter((item) => {
+          return item.increase;
+        });
+      case "moreThen1000":
+        return items.filter((item) => {
+          return item.salary > 1000;
+        });
+      default:
+        return items;
+    }
+  };
 
   render() {
     const { data, filter, category } = this.state;
@@ -69,11 +105,14 @@ class App extends Component {
 
         <div className="search-panel">
           <SearchPanel onChangeFilter={this.onChangeFilter} />
-          <AppFilter />
+          <AppFilter category={category} onChangeBtn={this.onChangeBtn} />
         </div>
 
         <EmployeesList
-          data={this.state.data}
+          data={this.filteredCategory(
+            this.filteredData(data, filter),
+            category
+          )}
           onDeleteItem={this.onDeleteItem}
           onChangeProp={this.onChangeProp}
         />

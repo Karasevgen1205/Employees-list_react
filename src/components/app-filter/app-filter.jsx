@@ -1,19 +1,31 @@
 import "./app-filter.scss";
 
-const AppFilter = () => {
-  return (
-    <div className="btn-group">
-      <button type="button" className="btn btn-light">
-        Все сотрудники
+const AppFilter = ({ category, onChangeBtn }) => {
+  const buttons = [
+    { name: "Все сотрудники", category: "all" },
+    { name: "На повышение", category: "increase" },
+    { name: "З/П больше 1000$", category: "moreThen1000" },
+  ];
+
+  const btns = buttons.map((item) => {
+    const active = category === item.category;
+    const newClass = active ? "btn-light" : "btn-outline-light";
+
+    return (
+      <button
+        type="button"
+        className={`btn ${newClass}`}
+        key={item.category}
+        onClick={() => {
+          onChangeBtn(item.category);
+        }}
+      >
+        {item.name}
       </button>
-      <button type="button" className="btn btn-outline-light">
-        На повышение
-      </button>
-      <button type="button" className="btn btn-outline-light">
-        З/П больше 1000$
-      </button>
-    </div>
-  );
+    );
+  });
+
+  return <div className="btn-group">{btns}</div>;
 };
 
 export default AppFilter;
